@@ -18,7 +18,6 @@ public class MailingAddress {
         stateCodeToNameMap.put("CA", "California");
         stateCodeToNameMap.put("CO", "Colorado");
         stateCodeToNameMap.put("CT", "Connecticut");
-        stateCodeToNameMap.put("DC", "District of Columbia");
         stateCodeToNameMap.put("DE", "Delaware");
         stateCodeToNameMap.put("FL", "Florida");
         stateCodeToNameMap.put("GA", "Georgia");
@@ -62,12 +61,6 @@ public class MailingAddress {
         stateCodeToNameMap.put("WI", "Wisconsin");
         stateCodeToNameMap.put("WV", "West Virginia");
         stateCodeToNameMap.put("WY", "Wyoming");
-        stateCodeToNameMap.put("GU", "Guam");
-        stateCodeToNameMap.put("VI", "Virgin Islands");
-        stateCodeToNameMap.put("PR", "Puerto Rico");
-        stateCodeToNameMap.put("AE", "Armed forces - Europe");
-        stateCodeToNameMap.put("AA", "Armed forces - America");
-        stateCodeToNameMap.put("AP", "Armed forces - Pacific");
 
         // Load US State Names.
         stateNameToCodeMap.put("Alabama","AL");
@@ -78,7 +71,6 @@ public class MailingAddress {
         stateNameToCodeMap.put("Colorado","CO");
         stateNameToCodeMap.put("Connecticut","CT");
         stateNameToCodeMap.put("Delaware","DE");
-        stateNameToCodeMap.put("District Of Columbia","DC");
         stateNameToCodeMap.put("Florida","FL");
         stateNameToCodeMap.put("Georgia","GA");
         stateNameToCodeMap.put("Hawaii","HI");
@@ -121,12 +113,6 @@ public class MailingAddress {
         stateNameToCodeMap.put("West Virginia","WV");
         stateNameToCodeMap.put("Wisconsin","WI");
         stateNameToCodeMap.put("Wyoming","WY");
-        stateNameToCodeMap.put("Guam", "GU");
-        stateNameToCodeMap.put("Puerto Rico","PR");
-        stateNameToCodeMap.put("Virgin Islands","VI");
-        stateNameToCodeMap.put("Armed Forces (AE)","AE");
-        stateNameToCodeMap.put("Armed Forces Americas","AA");
-        stateNameToCodeMap.put("Armed Forces Pacific","AP");
     }
 
     public MailingAddress (String primaryStreet, String secondaryStreet, String city,
@@ -141,16 +127,16 @@ public class MailingAddress {
     public String getFormattedAddress(){
         String formattedAddress = "";
         if (validateStreet(street) != null) {
-            formattedAddress += street + ", ";
+            formattedAddress += street + "\n";
         }
         else {
-            formattedAddress += "N/A, ";
+            formattedAddress += "N/A\n";
         }
         if (validateStreet(secondStreet) != null) {
-            formattedAddress += secondStreet + ", ";
+            formattedAddress += secondStreet + "\n";
         }
         else {
-            formattedAddress += "N/A, ";
+            formattedAddress += "N/A\n ";
         }
         if (validateCity(town) != null) {
             formattedAddress += town + ", ";
@@ -158,17 +144,17 @@ public class MailingAddress {
         else {
             formattedAddress += "N/A, ";
         }
-        if (validatePostalCode(zipcode) != null) {
-            formattedAddress += zipcode + ", ";
+        if (validateState(state1) != null) {
+            formattedAddress += state1 + ", ";
         }
         else {
             formattedAddress += "N/A, ";
         }
-        if (validateState(state1) != null) {
-            formattedAddress += state1 + ".";
+        if (validatePostalCode(zipcode) != null) {
+            formattedAddress += zipcode + ". ";
         }
         else {
-            formattedAddress += "N/A.";
+            formattedAddress += "N/A. ";
         }
         return formattedAddress;
     }
@@ -191,7 +177,7 @@ public class MailingAddress {
         if (state == null) {
             return null;
         }
-        state = state.substring(0,1).toUpperCase() + state.substring(1).toLowerCase();
+        state = toTitleCase(state);
         String temp = stateNameToCodeMap.get(state);
         if (temp != null) {
             return temp;
@@ -199,7 +185,7 @@ public class MailingAddress {
         state = state.toUpperCase();
         temp = stateCodeToNameMap.get(state);
         if (temp != null) {
-            return temp;
+            return state;
         }
         return null;
     }
@@ -251,5 +237,14 @@ public class MailingAddress {
         zipcode = validatePostalCode(postalCode);
     }
 
+    public static String toTitleCase(String givenString) {
+        String[] arr = givenString.split(" ");
+        StringBuffer sb = new StringBuffer();
 
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
 }
